@@ -1,14 +1,14 @@
 class Graph {
-  constructor(nodes, cbIsRelation) {
-    this.map = this.makeMap(nodes, cbIsRelation);
+  constructor(nodes, relation, cbIsRelation) {
+    this.map = this.makeMap(nodes, relation, cbIsRelation);
   }
 
-  makeMap(nodes, isRelation) {
+  makeMap(nodes, relation, isRelation) {
     const map = new Map();
     const length = nodes.length;
     for (let i = 0; i < length; i++) {
       for (let j = 0; j < length; j++) {
-        if (isRelation(nodes[i], nodes[j])) {
+        if (isRelation(nodes[i], nodes[j], relation)) {
           const key = nodes[i];
           const value = nodes[j];
           if (map.has(key)) {
