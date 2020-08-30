@@ -1,0 +1,132 @@
+class Graph {
+  constructor() {
+    this.adjacencyList = {};
+  }
+  addVertex(vertex) {
+    if (!this.adjacencyList[vertex]) this.adjacencyList[vertex] = [];
+  }
+  addEdge(vertex1, vertex2) {
+    this.adjacencyList[vertex1].push(vertex2);
+    this.adjacencyList[vertex2].push(vertex1);
+  }
+  removeEdge(vertex1, vertex2) {
+    this.adjacencyList[vertex1] = this.adjacencyList[vertex1].filter(
+      (v) => v !== vertex2
+    );
+    this.adjacencyList[vertex2] = this.adjacencyList[vertex2].filter(
+      (v) => v !== vertex1
+    );
+  }
+  removeVertex(vertex) {
+    this.adjacencyList[vertex].forEach((neighbor) => {
+      this.removeEdge(vertex, neighbor);
+    });
+    delete this.adjacencyList[vertex];
+  }
+  dfs_recursive(start) {
+    const result = [];
+    const visited = {};
+    const adjacencyList = this.adjacencyList;
+    (function dfs(vertex) {
+      result.push(vertex);
+      visited[vertex] = true;
+      adjacencyList[vertex].forEach((neighbor) => {
+        if (!visited[neighbor]) dfs(neighbor);
+      });
+    })(start);
+
+    return result;
+  }
+  dfs_iterative(start) {
+    const result = [];
+    const visited = {};
+    const stack = [];
+    let currentVertex;
+
+    // initial state
+    stack.push(start);
+    visited[start] = true;
+
+    // loop
+    while (stack.length) {
+      currentVertex = stack.pop();
+      result.push(currentVertex);
+      this.adjacencyList[currentVertex].forEach((neighbor) => {
+        if (!visited[neighbor]) {
+          stack.push(neighbor);
+          visited[neighbor] = true;
+        }
+      });
+    }
+
+    return result;
+  }
+  bfs(start) {
+    const result = [];
+    const visited = {};
+    const queue = [];
+    let currentVertex;
+
+    // initial state
+    queue.push(start);
+    visited[start] = true;
+
+    // loop
+    while (queue.length) {
+      currentVertex = queue.shift();
+      result.push(currentVertex);
+      this.adjacencyList[currentVertex].forEach((neighbor) => {
+        if (!visited[neighbor]) {
+          queue.push(neighbor);
+          visited[neighbor] = true;
+        }
+      });
+    }
+
+    return result;
+  }
+}
+
+const g = new Graph();
+g.addVertex('A');
+g.addVertex('B');
+g.addVertex('C');
+g.addVertex('D');
+g.addVertex('E');
+g.addVertex('F');
+
+g.addEdge('A', 'B');
+g.addEdge('A', 'C');
+g.addEdge('B', 'D');
+g.addEdge('C', 'E');
+g.addEdge('D', 'E');
+g.addEdge('D', 'F');
+g.addEdge('E', 'F');
+
+console.log(g);
+
+//          A
+//        /   \
+//       B     C
+//       |     |
+//       D --- E
+//        \   /
+//          F
+
+// {
+//   A: [ 'B', 'C' ],
+//   B: [ 'A', 'D' ],
+//   C: [ 'A', 'E' ],
+//   D: [ 'B', 'E', 'F' ],
+//   E: [ 'C', 'D', 'F' ],
+//   F: [ 'D', 'E' ]
+// }
+
+console.log(g.dfs_recursive('A'));
+// [ 'A', 'B', 'D', 'E', 'C', 'F' ]
+
+console.log(g.dfs_iterative('A'));
+// [ 'A', 'C', 'E', 'F', 'D', 'B' ]
+
+console.log(g.bfs('A'));
+// [ 'A', 'B', 'C', 'D', 'E', 'F' ]
