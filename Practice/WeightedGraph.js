@@ -5,18 +5,20 @@ class WeightedGraph {
     this.adjacencyList = {};
   }
   addVertex(vertex) {
-    if (!this.adjacencyList[vertex]) this.adjacencyList[vertex] = [];
+    if (!this.adjacencyList[vertex]) {
+      this.adjacencyList[vertex] = [];
+    }
   }
-  addEdge(vertex1, vertex2, weight) {
-    this.adjacencyList[vertex1].push({ node: vertex2, weight });
-    this.adjacencyList[vertex2].push({ node: vertex1, weight });
+  addEdge(v1, v2, weight) {
+    this.adjacencyList[v1].push({ node: v2, weight });
+    this.adjacencyList[v2].push({ node: v1, weight });
   }
-  removeEdge(vertex1, vertex2) {
-    this.adjacencyList[vertex1] = this.adjacencyList[vertex1].filter(
-      (neighbor) => neighbor.node !== vertex2
+  removeEdge(v1, v2) {
+    this.adjacencyList[v1] = this.adjacencyList[v1].filter(
+      (neighbor) => neighbor.node !== v2
     );
-    this.adjacencyList[vertex2] = this.adjacencyList[vertex2].filter(
-      (neighbor) => neighbor.node !== vertex1
+    this.adjacencyList[v2] = this.adjacencyList[v2].filter(
+      (neighbor) => neighbor.node !== v1
     );
   }
   removeVertex(vertex) {
@@ -34,8 +36,9 @@ class WeightedGraph {
       result.push(vertex);
       visited[vertex] = true;
       adjacencyList[vertex].forEach((neighbor) => {
-        const nextVertex = neighbor.node;
-        if (!visited[nextVertex]) dfs(nextVertex);
+        if (!visited[neighbor.node]) {
+          dfs(neighbor.node);
+        }
       });
     })(start);
 
@@ -45,22 +48,17 @@ class WeightedGraph {
     const result = [];
     const visited = {};
     const stack = [];
-    let currentVertex;
-    let nextVertex;
 
-    // initial state
     stack.push(start);
     visited[start] = true;
 
-    // loop
     while (stack.length) {
-      currentVertex = stack.pop();
+      const currentVertex = stack.pop();
       result.push(currentVertex);
       this.adjacencyList[currentVertex].forEach((neighbor) => {
-        nextVertex = neighbor.node;
-        if (!visited[nextVertex]) {
-          visited[nextVertex] = true;
-          stack.push(nextVertex);
+        if (!visited[neighbor.node]) {
+          stack.push(neighbor.node);
+          visited[neighbor.node] = true;
         }
       });
     }
@@ -71,22 +69,17 @@ class WeightedGraph {
     const result = [];
     const visited = {};
     const queue = [];
-    let currentVertex;
-    let nextVertex;
 
-    // initial state
     queue.push(start);
     visited[start] = true;
 
-    // loop
     while (queue.length) {
-      currentVertex = queue.shift();
+      const currentVertex = queue.shift();
       result.push(currentVertex);
       this.adjacencyList[currentVertex].forEach((neighbor) => {
-        nextVertex = neighbor.node;
-        if (!visited[nextVertex]) {
-          visited[nextVertex] = true;
-          queue.push(nextVertex);
+        if (!visited[neighbor.node]) {
+          queue.push(neighbor.node);
+          visited[neighbor.node] = true;
         }
       });
     }
@@ -141,18 +134,19 @@ class WeightedGraph {
         });
       }
     }
+
     return path.concat(smallest).reverse();
   }
 }
 
 var graph = new WeightedGraph();
+
 graph.addVertex('A');
 graph.addVertex('B');
 graph.addVertex('C');
 graph.addVertex('D');
 graph.addVertex('E');
 graph.addVertex('F');
-
 graph.addEdge('A', 'B', 4);
 graph.addEdge('A', 'C', 2);
 graph.addEdge('B', 'E', 3);
@@ -161,7 +155,6 @@ graph.addEdge('C', 'F', 4);
 graph.addEdge('D', 'E', 3);
 graph.addEdge('D', 'F', 1);
 graph.addEdge('E', 'F', 1);
-
 console.log(graph.adjacencyList);
 
 console.log(graph.dfs_recursive('A'));
@@ -169,4 +162,3 @@ console.log(graph.dfs_iterative('A'));
 console.log(graph.bfs('A'));
 
 console.log(graph.dijkstra('A', 'E'));
-// graph.dijkstra('A', 'E');
