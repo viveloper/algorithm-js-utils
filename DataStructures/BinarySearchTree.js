@@ -38,21 +38,6 @@ class BinarySearchTree {
       }
     }
   }
-  // find(value) {
-  //   return findNode(this.root);
-
-  //   function findNode(node) {
-  //     if (node === null) return null;
-  //     if (node.value === value) {
-  //       return node;
-  //     }
-  //     if (node.value > value) {
-  //       return findNode(node.left, value);
-  //     } else {
-  //       return findNode(node.right, value);
-  //     }
-  //   }
-  // }
   find(value) {
     let current = this.root;
     while (current) {
@@ -68,6 +53,18 @@ class BinarySearchTree {
   contains(value) {
     return !!this.find(value);
   }
+  bfs() {
+    if (this.root === null) return [];
+    const queue = [this.root];
+    const result = [];
+    while (queue.length > 0) {
+      const current = queue.shift();
+      result.push(current.value);
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+    return result;
+  }
 }
 
 const binarySearchTree = new BinarySearchTree();
@@ -76,6 +73,8 @@ binarySearchTree.insert(6);
 binarySearchTree.insert(3);
 binarySearchTree.insert(11);
 binarySearchTree.insert(8);
-// console.log(binarySearchTree);
+binarySearchTree.insert(15);
 
-console.log(binarySearchTree.find(6));
+// console.log(binarySearchTree.find(6));
+
+console.log(binarySearchTree.bfs());
