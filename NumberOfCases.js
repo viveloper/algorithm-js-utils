@@ -1,103 +1,111 @@
-// ========================================================================
-// n Pi r
-function permutationWithRepetition(items, r, result = []) {
-  if (r === 0) return result;
-  let newResult = [];
-  if (result.length === 0) {
-    items.forEach((item) => {
-      newResult.push([item]);
-    });
-  } else {
-    result.forEach((el) => {
-      items.forEach((item) => {
-        newResult.push(el.concat(item));
-      });
-    });
-  }
-  return permutationWithRepetition(items, r - 1, newResult);
-}
+// ==============================================================
+// nPr
+// ==============================================================
+function permutaion(items, r) {
+  const permutaions = [];
+  let count = 0;
+  recursion(items, r);
+  return {
+    count,
+    permutaions,
+  };
 
-console.log(permutationWithRepetition(['a', 'b', 'c'], 3));
-
-// ========================================================================
-// n P r
-function permutation(items, r, result = []) {
-  if (r === 0) return result;
-  let newResult = [];
-  if (result.length === 0) {
-    items.forEach((item) => {
-      newResult.push([item]);
-    });
-  } else {
-    result.forEach((el) => {
-      items.forEach((item) => {
-        if (!el.includes(item)) newResult.push(el.concat(item));
-      });
-    });
-  }
-  return permutation(items, r - 1, newResult);
-}
-
-console.log(permutation(['a', 'b', 'c'], 3));
-
-// ========================================================================
-// n H r
-function combinationWithRepetition(items, r) {
-  const result = permutationWithRepetition(items, r);
-  for (let i = result.length - 1; i > 0; i--) {
-    for (let j = i - 1; j >= 0; j--) {
-      if (isEqualComb(result[i], result[j])) {
-        result.splice(i, 1);
-        break;
-      }
+  function recursion(items, r, store = []) {
+    if (r === 0) {
+      permutaions.push(store);
+      count++;
+      return;
+    }
+    for (let i = 0; i < items.length; i++) {
+      const newStore = [...store, items[i]];
+      const nextItems = items.filter((item) => item !== items[i]);
+      recursion(nextItems, r - 1, newStore);
     }
   }
-  return result;
 }
 
-console.log(combinationWithRepetition(['a', 'b', 'c'], 3));
+console.log(permutaion([1, 2, 3], 2));
 
-// ========================================================================
-// n C r
+// ==============================================================
+// nCr
+// ==============================================================
 function combination(items, r) {
-  const result = permutation(items, r);
-  for (let i = result.length - 1; i > 0; i--) {
-    for (let j = i - 1; j >= 0; j--) {
-      if (isEqualComb(result[i], result[j])) {
-        result.splice(i, 1);
-        break;
-      }
+  const combinations = [];
+  let count = 0;
+  recursion(items, r);
+  return {
+    count,
+    combinations,
+  };
+
+  function recursion(items, r, store = []) {
+    if (r === 0) {
+      combinations.push(store);
+      count++;
+      return;
+    }
+    for (let i = 0; i < items.length; i++) {
+      const newStore = [...store, items[i]];
+      const nextItems = items.slice(i + 1, items.length);
+      recursion(nextItems, r - 1, newStore);
     }
   }
-  return result;
 }
 
-console.log(combination(['a', 'b', 'c'], 2));
+console.log(combination([1, 2, 3], 2));
 
-// ========================================================================
-// helper function
-function isEqualComb(comb1, comb2) {
-  const frequencyCount = {};
-  let result = true;
-  comb1.forEach((item) => {
-    if (!frequencyCount[item]) {
-      frequencyCount[item] = 1;
-    } else {
-      frequencyCount[item]++;
+// ==============================================================
+// n Pi r
+// ==============================================================
+function permutaionWithRepetition(items, r) {
+  const permutaions = [];
+  let count = 0;
+  recursion(items, r);
+  return {
+    count,
+    permutaions,
+  };
+
+  function recursion(items, r, store = []) {
+    if (r === 0) {
+      permutaions.push(store);
+      count++;
+      return;
     }
-  });
-  comb2.forEach((item) => {
-    if (!frequencyCount[item]) {
-      result = false;
-    } else {
-      frequencyCount[item]--;
+    for (let i = 0; i < items.length; i++) {
+      const newStore = [...store, items[i]];
+      const nextItems = [...items];
+      recursion(nextItems, r - 1, newStore);
     }
-  });
-
-  if (!result) return false;
-
-  for (const key in frequencyCount) {
-    if (frequencyCount[key] !== 0) return false;
   }
-  return true;
 }
+
+console.log(permutaionWithRepetition([1, 2, 3], 3));
+
+// ==============================================================
+// nHr
+// ==============================================================
+function combinationWithRepetition(items, r) {
+  const combinations = [];
+  let count = 0;
+  recursion(items, r);
+  return {
+    count,
+    combinations,
+  };
+
+  function recursion(items, r, store = []) {
+    if (r === 0) {
+      combinations.push(store);
+      count++;
+      return;
+    }
+    for (let i = 0; i < items.length; i++) {
+      const newStore = [...store, items[i]];
+      const nextItems = items.slice(i, items.length);
+      recursion(nextItems, r - 1, newStore);
+    }
+  }
+}
+
+console.log(combinationWithRepetition([1, 2, 3], 2));
