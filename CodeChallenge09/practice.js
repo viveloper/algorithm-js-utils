@@ -9,6 +9,8 @@ function solution(n) {
       return row;
     });
 
+  console.log(tri);
+
   let cnt = 1;
 
   // starting point
@@ -35,11 +37,8 @@ function solution(n) {
     [r3, c3] = [r3 - 1, c3 - 2];
   }
 
-  const result = [];
-  tri.forEach((row) => row.forEach((el) => result.push(el)));
-
-  return result;
+  console.log(tri);
 }
 
-console.log(solution(6));
+solution(7);
 // [1,2,15,3,16,14,4,17,21,13,5,18,19,20,12,6,7,8,9,10,11]
