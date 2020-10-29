@@ -5,10 +5,7 @@ function permutation(items, r) {
   const permutations = [];
   let count = 0;
   recursion(items, r);
-  return {
-    count,
-    permutations,
-  };
+  return permutations;
 
   function recursion(items, r, store = []) {
     if (r === 0) {
@@ -18,7 +15,8 @@ function permutation(items, r) {
     }
     for (let i = 0; i < items.length; i++) {
       const newStore = [...store, items[i]];
-      const nextItems = items.filter((item) => item !== items[i]);
+      const nextItems = [...items];
+      nextItems.splice(i, 1);
       recursion(nextItems, r - 1, newStore);
     }
   }
