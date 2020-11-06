@@ -43,5 +43,54 @@ function validAnagram(str1, str2) {
   return true;
 }
 
-console.log(validAnagram('aaz', 'zza')); // false
-console.log(validAnagram('cinema', 'iceman')); // true
+// console.log(validAnagram('aaz', 'zza')); // false
+// console.log(validAnagram('cinema', 'iceman')); // true
+
+// ==============================================================
+
+function sameFrequency(num1, num2) {
+  const frequency = {};
+  let q = num1;
+  while (q > 0) {
+    const digit = q % 10;
+    q = Math.floor(q / 10);
+    frequency[digit] =
+      frequency[digit] === undefined ? 1 : frequency[digit] + 1;
+  }
+
+  q = num2;
+  while (q > 0) {
+    const digit = q % 10;
+    q = Math.floor(q / 10);
+    frequency[digit] =
+      frequency[digit] === undefined ? -1 : frequency[digit] - 1;
+  }
+
+  for (const digit in frequency) {
+    if (frequency[digit] !== 0) return false;
+  }
+  return true;
+}
+
+// console.log(sameFrequency(182, 281)); // true
+// console.log(sameFrequency(34, 14)); // false
+// console.log(sameFrequency(3589578, 5879385)); // true
+// console.log(sameFrequency(22, 222)); // false
+
+// ==============================================================
+
+function areThereDuplicates(...args) {
+  const frequency = {};
+  args.forEach((arg) => {
+    if (frequency[arg] === undefined) frequency[arg] = 1;
+    else frequency[arg] += 1;
+  });
+  for (const arg in frequency) {
+    if (frequency[arg] > 1) return true;
+  }
+  return false;
+}
+
+console.log(areThereDuplicates(1, 2, 3)); // false
+console.log(areThereDuplicates(1, 2, 2)); // true
+console.log(areThereDuplicates('a', 'b', 'c', 'a')); // true
